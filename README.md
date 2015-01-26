@@ -1,5 +1,5 @@
 # notif
-notif is minimal command line tool for send message to Notification Center on OSX.
+notif is minimal command line tool to send message to Notification Center on OSX.
 
 # Get started
 
