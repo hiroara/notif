@@ -26,7 +26,7 @@ func (n *Notifier) Send(message, title, subtitle string) (err error) {
 	}
 	defer cmd.Wait()
 
-	_, err = io.WriteString(stdin, "display notification"+escape(message)+getOptions(title, subtitle))
+	_, err = io.WriteString(stdin, strings.Join([]string{"display notification", escape(message), getOptions(title, subtitle)}, " "))
 	if err != nil {
 		return
 	}
@@ -43,10 +43,10 @@ func escape(s string) string {
 }
 
 func getOptions(title, subtitle string) string {
-	options := make([]string, 3, 5)
+	options := make([]string, 0, 5)
 	options = append(options, "with", "title", escape(title))
 	if subtitle != "" {
-		options = append(options, "subtitle", subtitle)
+		options = append(options, "subtitle", escape(subtitle))
 	}
 	return strings.Join(options, " ")
 }
