@@ -9,7 +9,7 @@ import (
 
 type Notifier struct{}
 
-func (n *Notifier) Send(message, title, subtitle string) (err error) {
+func (n *Notifier) Send(message, title, subtitle, sound string) (err error) {
 	cmd := exec.Command("osascript")
 
 	if err = pipeAll(cmd, os.Stdout, os.Stderr); err != nil {
@@ -26,7 +26,7 @@ func (n *Notifier) Send(message, title, subtitle string) (err error) {
 	}
 	defer cmd.Wait()
 
-	_, err = io.WriteString(stdin, strings.Join([]string{"display notification", escape(message), getOptions(title, subtitle)}, " "))
+	_, err = io.WriteString(stdin, strings.Join([]string{"display notification", escape(message), getOptions(title, subtitle, sound)}, " "))
 	if err != nil {
 		return
 	}
@@ -42,11 +42,14 @@ func escape(s string) string {
 	return "\"" + strings.Replace(s, "\"", "\\\"", -1) + "\""
 }
 
-func getOptions(title, subtitle string) string {
+func getOptions(title, subtitle, sound string) string {
 	options := make([]string, 0, 5)
 	options = append(options, "with", "title", escape(title))
 	if subtitle != "" {
 		options = append(options, "subtitle", escape(subtitle))
+	}
+	if sound != "" {
+		options = append(options, "sound name", escape(sound))
 	}
 	return strings.Join(options, " ")
 }

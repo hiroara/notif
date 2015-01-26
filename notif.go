@@ -31,6 +31,11 @@ var flags = []cli.Flag{
 		Name:  "subtitle, s",
 		Usage: "subtitle of notification",
 	},
+	cli.StringFlag{
+		Name:  "sound, S",
+		Value: "Default",
+		Usage: "sonund of notification",
+	},
 }
 
 func notif(c *cli.Context) {
@@ -40,7 +45,7 @@ func notif(c *cli.Context) {
 		log.Fatal(err)
 	}
 
-	err = n.Send(message, c.String("title"), c.String("subtitle"))
+	err = n.Send(message, c.String("title"), c.String("subtitle"), c.String("sound"))
 	if err != nil {
 		log.Fatal(err)
 	}
